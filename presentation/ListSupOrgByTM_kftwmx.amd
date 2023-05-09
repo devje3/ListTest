@@ -1,0 +1,41 @@
+{
+  "appProperties": [ ],
+  "tasks": [
+    {
+      "id": "root",
+      "routingPattern": "/",
+      "page": {
+        "id": "home"
+      }
+    },
+    {
+      "id": "postRiskOfLeaving",
+      "routingPattern": "postRiskOfLeaving",
+      "page": {
+        "id": "postRiskOfLeaving"
+      }
+    },
+    {
+      "id": "postRetentionEffort",
+      "routingPattern": "postRetentionEffort",
+      "page": {
+        "id": "postRetentionEffort"
+      }
+    }
+  ],
+  "applicationId": "ListSupOrgByTM_kftwmx",
+  "dataProviders": [
+    {
+      "key": "COMMON",
+      "value": "https://api.workday.com/common/v1/"
+    },
+    {
+      "key": "WQL",
+      "value": "https://api.workday.com/wql/v1/"
+    },
+    {
+      "key": "WQL-RaaS",
+      "value": "https://api.workday.com/raas/jbanks/RPT_XTEND_-_Global_Roster_All_Employees_by_TL"
+    }
+  ]
+}

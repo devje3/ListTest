@@ -1,0 +1,206 @@
+{
+  "id": "postRiskOfLeaving",
+  "endPoints": [ ],
+  "outboundData": {
+    "outboundEndPoints": [ ]
+  },
+  "presentation": {
+    "headerSize": "VPS_DEFAULT",
+    "pageType": "edit",
+    "micro": true,
+    "microFirstPageOnly": true,
+    "title": {
+      "type": "title",
+      "label": "Enter Risk of Leaving",
+      "enabled": false
+    },
+    "body": {
+      "type": "section",
+      "horizontal": false,
+      "children": [
+        {
+          "type": "fieldSet",
+          "id": "RiskOfLeaving",
+          "_label": "Enter a Risk of Leaving",
+          "children": [
+            {
+              "type": "richText",
+              "id": "instructionId",
+              "value": "Please refer to the following <a href='https://docs.google.com/document/d/1mQAsZjj45VX6rmYtm7SfV1aj8QH5nJwEg8g3jhB0LWU' target='_blank'>Job aid</a> for instructions on how to fill out the risk of leaving tool.",
+              "enabled": "false"
+            },
+            {
+              "type": "richText",
+              "label": "Employee",
+              "id": "riskPerson",
+              "value": "<% queryParams.employee %>",
+              "enabled": false
+            },
+            {
+              "type": "dropdown",
+              "label": "Risk of Leaving",
+              "id": "riskLevelList",
+              "values": "<%
+                         [{
+                             'id': 'Low',
+                             'descriptor': 'Low'
+                         },
+{
+                             'id': 'Medium',
+                             'descriptor': 'Medium'
+                         },
+{
+                             'id': 'High',
+                             'descriptor': 'High'
+                         }]
+                         %>",
+              "required": true,
+              "guide": {
+                "type": "guide",
+                "id": "riskLevelGuide",
+                "title": "Risk of Leaving Level",
+                "text": "The Risk of leaving level refers to how likely it is that the team member will leave the company (Voluntary/Involuntary)"
+              }
+            },
+            {
+              "type": "dropdown",
+              "id": "reasonLeaving",
+              "label": "Category",
+              "values": "<%[
+{
+                  'id': 'Voluntary',
+                  'descriptor': 'Voluntary'
+              },
+{
+                  'id': 'Involuntary',
+                  'descriptor': 'Involuntary'
+              }
+              ]%>",
+              "required": true,
+              "visible": false,
+              "idKey": "descriptor",
+              "guide": {
+                "type": "guide",
+                "id": "riskReasonGuide",
+                "title": "Category",
+                "text": "It shows us the two main categories by which a person can leave the company. Voluntarily or Involuntarily. Depending on this selection the reasons available in the following dropdown will change"
+              }
+            },
+            {
+              "type": "dropdown",
+              "id": "subReasonLeaving",
+              "label": "Reason",
+              "values": "<% [] %>",
+              "required": true,
+              "visible": false,
+              "guide": {
+                "type": "guide",
+                "id": "riskReasonGuide",
+                "title": "Reason of Leaving",
+                "text": "The options displayed in this dropdown will depend on what is selected in the category dropdown. It refers to the specific reason why the team member is at medium/high risk of leaving. Please refer to the job aid in case you want to know more about each reason of leaving."
+              }
+            },
+            {
+              "type": "date",
+              "id": "tentativeDateLeaving",
+              "label": "Tentative Date of Leaving",
+              "required": true,
+              "visible": false,
+              "guide": {
+                "type": "guide",
+                "id": "tentativeDateGuide",
+                "title": "Tentative Date of Leaving",
+                "text": "This option appears when we select the Middle or High option as risk of leaving level. This option allows us to enter the date in which we have identified the team member could leave the company"
+              }
+            },
+            {
+              "type": "instanceList",
+              "label": "Engagement Level",
+              "id": "engagementList",
+              "instanceList": [
+                {
+                  "id": "Engaged",
+                  "descriptor": "Engaged"
+                },
+                {
+                  "id": "Passive",
+                  "descriptor": "Passive"
+                },
+                {
+                  "id": "Disengaged",
+                  "descriptor": "Disengaged"
+                }
+              ],
+              "required": true,
+              "guide": {
+                "type": "guide",
+                "id": "engagementLevelGuide",
+                "title": "Engagement Level",
+                "text": "Employee engagement is the strength of the mental and emotional connection employees feel toward the work they do, their teams, and their organization"
+              }
+            },
+            {
+              "type": "dropdown",
+              "id": "engagementReason",
+              "label": "Engagement Reason",
+              "values": "<% [] %>",
+              "required": true,
+              "guide": {
+                "type": "guide",
+                "id": "engagementReasonGuide",
+                "title": "Engagement Reason",
+                "text": "The reason why our team member is Engaged, Passive or Disengaged"
+              }
+            },
+            {
+              "type": "dropdown",
+              "id": "performanceRating",
+              "label": "Performance Rating",
+              "values": "<% [
+{
+                  'id': 'Exceed Expectactions',
+                  'descriptor': 'Exceed Expectactions'
+              },
+{
+                  'id': 'Meets Expectactions',
+                  'descriptor': 'Meets Expectactions'
+              },
+{
+                  'id': 'Below Expectactions',
+                  'descriptor': 'Below Expectactions'
+              }
+              ] %>",
+              "guide": {
+                "type": "guide",
+                "id": "performanceRatingGuide",
+                "title": "Performance Rating",
+                "text": "This option allows us to indicate the general performance of our team member. We must consider how well our team member is performing in the current job"
+              }
+            },
+            {
+              "type": "checkBox",
+              "id": "worthRetain",
+              "label": "Worth to Retain",
+              "value": "<% false %>",
+              "guide": {
+                "type": "guide",
+                "id": "worthRetainGuide",
+                "title": "Worth to Retain",
+                "text": "This checkbox is not mandatory but it is recommended to click on the checkbox in case we want to indicate that the team member is doing a good job and shows a good attitude or leave it empty in case the team member has attitude/disciplinary problems."
+              }
+            },
+            {
+              "type": "textArea",
+              "id": "comment",
+              "label": "Comment"
+            }
+          ]
+        }
+      ]
+    },
+    "footer": {
+      "type": "footer",
+      "children": [ ]
+    }
+  }
+}

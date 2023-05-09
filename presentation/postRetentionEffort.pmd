@@ -1,0 +1,152 @@
+{
+  "id": "postRetentionEffort",
+  "endPoints": [ ],
+  "outboundData": {
+    "outboundEndPoints": [ ]
+  },
+  "presentation": {
+    "headerSize": "VPS_DEFAULT",
+    "pageType": "edit",
+    "micro": true,
+    "title": {
+      "type": "title",
+      "label": "Manage Retention Effort",
+      "enabled": false
+    },
+    "body": {
+      "type": "section",
+      "horizontal": false,
+      "children": [
+        {
+          "type": "richText",
+          "id": "instructionId",
+          "value": "Please refer to the following <a href='https://docs.google.com/document/d/1mQAsZjj45VX6rmYtm7SfV1aj8QH5nJwEg8g3jhB0LWU' target='_blank'>Job aid</a> for instructions on how to fill out the risk of leaving tool.",
+          "enabled": "false"
+        },
+        {
+          "type": "fieldSet",
+          "id": "retentionEffortFS",
+          "_label": "Enter a Retention Effort",
+          "children": [
+            {
+              "type": "richText",
+              "label": "Employee",
+              "id": "rePerson",
+              "value": "<% queryParams.employee %>",
+              "enabled": false
+            },
+            {
+              "type": "dropdown",
+              "id": "interventionID",
+              "label": "Intervention",
+              "values": "<% [] %>",
+              "valueOutBinding": "tIRetentionEffortsPOST.intervention",
+              "required": true,
+              "guide": {
+                "type": "guide",
+                "id": "interventionGuide",
+                "title": "Intervention",
+                "text": "What is the action we are going to take to retain the team member. You can also select 'Not applicable' in case a retention effort is not applied"
+              }
+            },
+            {
+              "type": "textArea",
+              "id": "retentionDescription",
+              "label": "Comment Effort Description",
+              "valueOutBinding": "tIRetentionEffortsPOST.retentionEffort",
+              "required": true
+            }
+          ]
+        },
+        {
+          "type": "fieldSet",
+          "id": "retationForSelectWorker",
+          "title": "Retention Efforts",
+          "collapsible": true,
+          "initializeCollapsed": false,
+          "children": [
+            {
+              "type": "grid",
+              "label": "Retention Efforts",
+              "id": "retentionEffortGrid",
+              "rows": "<% %>",
+              "rowVariableName": "retention",
+              "enabled": false,
+              "columns": [
+                {
+                  "type": "column",
+                  "columnId": "entryDate",
+                  "label": "Entry Date",
+                  "cellTemplate": {
+                    "type": "text",
+                    "value": " <%  %> "
+                  }
+                },
+                {
+                  "type": "column",
+                  "columnId": "status",
+                  "label": "Status",
+                  "cellTemplate": {
+                    "type": "text",
+                    "value": "<%  %>"
+                  }
+                },
+                {
+                  "type": "column",
+                  "columnId": "intervention",
+                  "label": "Intervention",
+                  "cellTemplate": {
+                    "type": "text",
+                    "value": "<%  %>"
+                  }
+                },
+                {
+                  "type": "column",
+                  "columnId": "retentionEffortComment",
+                  "label": "Description",
+                  "cellTemplate": {
+                    "type": "text",
+                    "value": "<%  %>"
+                  }
+                },
+                {
+                  "type": "column",
+                  "columnId": "resolutionDate",
+                  "label": "Resolution Date",
+                  "cellTemplate": {
+                    "type": "text",
+                    "value": "<% %>"
+                  }
+                },
+                {
+                  "type": "column",
+                  "columnId": "resolutionComment",
+                  "label": "Resolution Comment",
+                  "cellTemplate": {
+                    "type": "text",
+                    "value": "<%  %>"
+                  }
+                },
+                {
+                  "type": "column",
+                  "columnId": "updateRetention",
+                  "label": "Update",
+                  "cellTemplate": {
+                    "type": "button",
+                    "action": "AUXILIARY",
+                    "label": "Update",
+                    "visible": "<% ( retention.status != 'Resolved' )  %>"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "footer": {
+      "type": "footer",
+      "children": [ ]
+    }
+  }
+}

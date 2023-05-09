@@ -1,0 +1,210 @@
+{
+  "id": "home",
+  "endPoints": [
+    {
+      "baseUrlType": "COMMON",
+      "name": "currLoginUser",
+      "authType": "sso",
+      "url": "/workers/me"
+    },
+    {
+      "baseUrlType": "COMMON",
+      "name": "supOrgManaged",
+      "authType": "sso",
+      "url": "<%
+               var idSupByWorker = currLoginUser.supervisoryOrganizationsManaged;
+               var IdSupList     = idSupByWorker.remove('https://api.workday.com/api/v1');
+               return IdSupList;
+              %>"
+    },
+    {
+      "baseUrlType": "COMMON",
+      "name": "workerListSupOrg",
+      "authType": "sso",
+      "url": "<%
+                var idWorkerList    = supOrgManaged.data[0].workers;
+                var wkerListSupOrg  = idWorkerList.remove('https://api.workday.com/api/v1');
+                return wkerListSupOrg;
+              %>"
+    },
+    {
+      "baseUrlType": "COMMON",
+      "name": "photoWorker",
+      "authType": "sso",
+      "deferred": true,
+      "url": "<% 'workers/'+ id + '?view=workerPhotoWIDView' %>"
+    },
+    {
+      "name": "riskOfLeavingWorker",
+      "baseUrlType": "WQL",
+      "authType": "sso",
+      "deferred": true,
+      "url": "<%
+               var query = 'SELECT employee, entryDate, level, riskStatus'+
+                   ' FROM  GlobalRiskofLeaving_kftwmx_tIRiskOfLeavings '+
+                   ' WHERE (employee = \"'  + id +'\") ORDER BY entryDate LIMIT 1 ';
+               return 'data?query=' + query.urlEncode();
+               %>"
+    },
+    {
+      "name": "employeeInfo",
+      "baseUrlType": "WQL-RaaS",
+      "authType": "sso",
+      "url": "?All_Worker_s_Managers!WID=3aa5550b7fe348b98d7b5741afc65534"
+    }
+  ],
+  "presentation": {
+    "title": {
+      "type": "title",
+      "label": "Workday Extend"
+    },
+    "body": {
+      "type": "section",
+      "children": [
+        {
+          "type": "grid",
+          "label": "Team Members",
+          "id": "risksGrid",
+          "rows": "<%
+            var newWorkerData = workerListSupOrg.data;
+            return newWorkerData;
+            %>",
+          "rowVariableName": "riskRow",
+          "enabled": false,
+          "columns": [
+            {
+              "type": "column",
+              "columnId": "workerPhoto",
+              "label": "Worker Photo",
+              "cellTemplate": {
+                "type": "image",
+                "endpoint": {
+                  "url": "<%
+                          var photo = photoWorker.invoke( { 'id': riskRow.id });
+                          photo.workerPhotos.href;
+                          %>",
+                  "baseUrlType": "app",
+                  "authType": "sso"
+                }
+              }
+            },
+            {
+              "type": "column",
+              "columnId": "workerName",
+              "label": "Name",
+              "cellTemplate": {
+                "type": "text",
+                "value": " <% riskRow.descriptor %> "
+              }
+            },
+            {
+              "type": "column",
+              "columnId": "workerID",
+              "label": "Workday ID",
+              "cellTemplate": {
+                "type": "text",
+                "value": " <% riskRow.id %> "
+              }
+            },
+            {
+              "type": "column",
+              "columnId": "riskLastEntryDate",
+              "label": "Last GROL Entry Date",
+              "cellTemplate": {
+                "type": "date",
+                "value": " <%
+                           var risk = riskOfLeavingWorker.invoke( {'id': riskRow.id});
+                           !empty(risk.data) ? risk.data[0].entryDate : null
+                           %> "
+              }
+            },
+            {
+              "type": "column",
+              "columnId": "riskValue",
+              "label": "Risk of Leaving",
+              "cellTemplate": {
+                "type": "button",
+                "action": "AUXILIARY",
+                "label": "Create Risk",
+                "visible": "<%
+                            var risk = riskOfLeavingWorker.invoke( {'id': riskRow.id});
+                            empty(risk.data)
+                            %>",
+                "taskReference": {
+                  "taskId": "postRiskOfLeaving",
+                  "parameterBindings": {
+                    "workerID": "<% riskRow.id %>",
+                    "employee": "<% riskRow.descriptor %>"
+                  }
+                }
+              }
+            },
+            {
+              "type": "column",
+              "columnId": "retention",
+              "label": "Retention Effort",
+              "cellTemplate": {
+                "type": "button",
+                "action": "AUXILIARY",
+                "label": "Manage Retention Effort",
+                "visible": "<%
+                            var risk = riskOfLeavingWorker.invoke( {'id': riskRow.id});
+                            !empty(risk.data)
+                            %>",
+                "taskReference": {
+                  "taskId": "postRetentionEffort",
+                  "parameterBindings": {
+                    "workerID": "<% riskRow.id %>",
+                    "employee": "<% riskRow.descriptor %>",
+                    "risk": "<% var risk = riskOfLeavingWorker.invoke( {'id': riskRow.id});
+                               return risk.data %>"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "value": "<% employeeInfo %>"
+        },
+        {
+          "type": "grid",
+          "label": "Team Members",
+          "id": "Employee",
+          "rows": "<%
+                   employeeInfo.Report_Entry
+                   %>",
+          "rowVariableName": "employeeData",
+          "enabled": false,
+          "columns": [
+            {
+              "type": "column",
+              "columnId": "workerPhoto2",
+              "label": "Worker Photo",
+              "cellTemplate": {
+                "type": "image",
+                "endpoint": {
+                  "url": "<%
+                          employeeData.workerPhotos
+                          %>",
+                  "baseUrlType": "app",
+                  "authType": "sso"
+                }
+              }
+            },
+            {
+              "type": "column",
+              "columnId": "workerID",
+              "label": "Workday ID",
+              "cellTemplate": {
+                "type": "text",
+                "value": " <% employeeData.Employee %> "
+              }
+            }
+          ]
+        }
+      ]
+    }
+  }
+}
